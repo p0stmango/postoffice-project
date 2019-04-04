@@ -12,6 +12,10 @@ def execute(command):
 	try:
 		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		sock.sendto((command), (ip, 5050))
+		respSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		respSock.bind(('0.0.0.0', 6060))
+		response = respSock.recvfrom(4096)
+		print(response[0])
 	
 	except socket.gaierror:
 		print("OWO (notices lack of internet connection)")
