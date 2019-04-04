@@ -9,12 +9,16 @@ try:
 		if not command:
 			continue
 		try:
+			print(command[0])
 			ipTuple = command[1]
 			ip = ipTuple[0]
 			#print(ip)
 			output = subprocess.check_output(command[0].split())
 			sock.sendto(str(output), (ip, 6060))
 		except OSError:
-			print('That cannot be done')
+			ipTuple = command[1]
+			ip = ipTuple[0]
+			sock.sendto(('Not a recognised command'), (ip, 6060))
+
 except KeyboardInterrupt:
 	print('KeyboardInterrupt')
