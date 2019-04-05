@@ -4,7 +4,8 @@ import sys, socket
 commands = ['execute', 'exfil']
 
 if len(sys.argv) <2:
-    print("USAGE: " + sys.argv[0] + " [IP]  " + str(commands))
+	print("USAGE: " + sys.argv[0] + " [IP]  " + str(commands))
+	sys.exit()
 
 ip = sys.argv[1]
 
@@ -38,4 +39,5 @@ if sys.argv[2] in commands:
 		exfiltrate(filepath)
 
 else:
-    print("USAGE: " + sys.argv[0] + " [IP] " + str(commands))
+	print("USAGE: " + sys.argv[0] + " [IP] " + str(commands))
+	sys.exit()
