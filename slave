@@ -10,7 +10,6 @@ try:
 			continue
 		try:
 			instruction = command[0].decode('utf-8')
-			print(instruction)
 			ipTuple = command[1]
 			ip = ipTuple[0]
 			#print(ip)
