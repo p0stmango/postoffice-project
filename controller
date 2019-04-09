@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 import sys, socket
 
-commands = ['execute']
+commands = ['execute', 'list', 'listadd']
+usageString = ("USAGE: " + sys.argv[0] + " " + str(commands) + " [IP]")
 
 if len(sys.argv) <2:
-	print("USAGE: " + sys.argv[0] + " [IP]  " + str(commands))
+	print(usageString)
 	sys.exit()
-
-ip = sys.argv[1]
 
 def execute(command):
 	try:
+		ip = sys.argv[2]
 		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		sock.sendto(bytes(command, 'utf-8'), (ip, 5151))
 		respSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -25,14 +25,28 @@ def execute(command):
 	
 	except socket.gaierror:
 		print("OWO (notices lack of internet connection)")
+try:
+	if sys.argv[1] in commands:
+		instruction = sys.argv[1]
+		if instruction == 'execute':
+			shellCom = sys.argv[3]
+			for x in range(4, len(sys.argv)):
+				shellCom = shellCom + " " + sys.argv[x]
+			execute(shellCom)
+		elif instruction == 'list':
+			filename = "hosts.txt"
+			file = open(filename,'r')
+			for line in file:
+				print(line)
+			file.close
+		elif instruction == 'listadd':
+			ip = sys.argv[1]
+			filename = 'hosts.txt'
+			file = open(filename, 'a')
+			file.write(ip)
 
-if sys.argv[2] in commands:
-	instruction = sys.argv[2]
-	if instruction == 'execute':
-		shellCom = sys.argv[3]
-		for x in range(4, len(sys.argv)):
-			shellCom = shellCom + " " + sys.argv[x]
-		execute(shellCom)
-else:
-	print("USAGE: " + sys.argv[0] + " [IP] " + str(commands))
-	sys.exit()
+	else:
+		print(usageString)
+		sys.exit()
+except IndexError:
+	print(usageString)
