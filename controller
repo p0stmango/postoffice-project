@@ -42,8 +42,22 @@ try:
 		elif instruction == 'listadd':
 			ip = sys.argv[1]
 			filename = 'hosts.txt'
-			file = open(filename, 'a')
-			file.write(ip)
+			ip = sys.argv[2]
+			sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+			sock.sendto(bytes('uname -a', 'utf-8'), (ip, 5151))
+			respSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+			respSock.bind(('0.0.0.0', 6060))
+			respSock.settimeout(15)
+			try:
+				data = respSock.recvfrom(4096)
+				file = open(filename, 'a')
+				osInfo = data[0].decode('utf-8')
+				if osInfo != 'oWo naughty, you can\'t do that':
+					file.write(ip+"|"+osInfo+"\n")
+				else:
+					file.write(ip + "|" + 'Windows')
+			except socket.timeout:
+				print('UWU No listener available')
 
 	else:
 		print(usageString)
