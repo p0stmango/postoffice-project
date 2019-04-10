@@ -24,7 +24,7 @@ def execute(command):
 			return("UwU, looks like there's no listener")
 	
 	except socket.gaierror:
-		print("OWO (notices lack of internet connection)")
+		return("Not connected to internet at time of scanning")
 try:
 	if sys.argv[1] in commands:
 		instruction = sys.argv[1]
