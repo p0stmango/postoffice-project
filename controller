@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys, socket
 
-commands = ['execute', 'list', 'listadd']
+commands = ['execute', 'list', 'listadd', 'help']
 usageString = ("USAGE: " + sys.argv[0] + " " + str(commands) + " [IP]")
 
 if len(sys.argv) <2:
@@ -51,6 +51,10 @@ try:
 				data = execute('ver')
 				file.write(ip + '|' + data.lstrip())
 			file.close()
+		elif instruction == 'help':
+			print('execute- run a command on remote machine')
+			print('list- list machines that have been communicated with')
+			print('listadd- checks whether a machine is alive and adds to the list if it is')
 	else:
 		print(usageString)
 		sys.exit()
