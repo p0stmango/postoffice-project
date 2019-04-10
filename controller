@@ -46,10 +46,11 @@ try:
 			file = open(filename, 'a')
 			data = execute('uname -a')
 			if data != 'oWo naughty, you can\'t do that':
-				file.write(ip + '|' + data + '\n')
+				file.write(ip + '|' + data)
 			else:
-				file.write(ip + '|' + 'Windows' + '\n')
-
+				data = execute('ver')
+				file.write(ip + '|' + data.lstrip())
+			file.close()
 	else:
 		print(usageString)
 		sys.exit()
