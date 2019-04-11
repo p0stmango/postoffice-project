@@ -1,0 +1,16 @@
+#!/usr/bin/python3
+import socket
+
+assignedip = '192.168.43.80'
+while 1:
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sock.bind(('0.0.0.0', 5151))
+	command = sock.recvfrom(4096)
+	ipTuple = command[1]
+	ip = ipTuple[0]
+	sender = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sender.sendto(command[0], (assignedip, 5151))
+	respSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	respSock.bind(('0.0.0.0', 6060))
+	data = respSock.recvfrom(4096)
+	sender.sendto(data[0], (ip, 6060))
