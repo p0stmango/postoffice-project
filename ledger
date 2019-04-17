@@ -1,0 +1,16 @@
+#!/usr/bin/python3
+import socket
+filename = 'hosts.txt'
+
+try:
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sock.bind(('0.0.0.0', 443))
+	while True:
+		data = sock.recvfrom(4096)
+		file = open(filename, 'a')
+		ip = data[1]
+		file.write(ip[0] + '|' + data[0].decode('utf-8'))
+		file.close()
+		
+except KeyboardInterrupt:
+	print('KeyboardInterrup')

